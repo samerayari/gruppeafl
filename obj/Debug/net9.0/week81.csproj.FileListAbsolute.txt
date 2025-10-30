@@ -1,0 +1,14 @@
+/Users/Razije/RiderProjects/week81/week81/bin/Debug/net9.0/week81
+/Users/Razije/RiderProjects/week81/week81/bin/Debug/net9.0/week81.deps.json
+/Users/Razije/RiderProjects/week81/week81/bin/Debug/net9.0/week81.runtimeconfig.json
+/Users/Razije/RiderProjects/week81/week81/bin/Debug/net9.0/week81.dll
+/Users/Razije/RiderProjects/week81/week81/bin/Debug/net9.0/week81.pdb
+/Users/Razije/RiderProjects/week81/week81/obj/Debug/net9.0/week81.GeneratedMSBuildEditorConfig.editorconfig
+/Users/Razije/RiderProjects/week81/week81/obj/Debug/net9.0/week81.AssemblyInfoInputs.cache
+/Users/Razije/RiderProjects/week81/week81/obj/Debug/net9.0/week81.AssemblyInfo.cs
+/Users/Razije/RiderProjects/week81/week81/obj/Debug/net9.0/week81.csproj.CoreCompileInputs.cache
+/Users/Razije/RiderProjects/week81/week81/obj/Debug/net9.0/week81.dll
+/Users/Razije/RiderProjects/week81/week81/obj/Debug/net9.0/refint/week81.dll
+/Users/Razije/RiderProjects/week81/week81/obj/Debug/net9.0/week81.pdb
+/Users/Razije/RiderProjects/week81/week81/obj/Debug/net9.0/week81.genruntimeconfig.cache
+/Users/Razije/RiderProjects/week81/week81/obj/Debug/net9.0/ref/week81.dll

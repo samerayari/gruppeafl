@@ -1,0 +1,194 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Avalonia.Controls;
+
+namespace InventorySystem;
+
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+        DataContext = this;
+
+
+        var item1 = new UnitItem
+        {
+            Name = "lego",
+            PricePerUnit = 20
+        };
+        var item2 = new BulkItem
+        {
+            Name = "viskelæder",
+            PricePerUnit = 2.0m
+        };
+        var item3 = new UnitItem
+        {
+            Name = "blyant",
+            PricePerUnit = 1
+        };
+        var orderLine1 = new OrderLine
+        {
+            Item = item1,
+            Quantity = 4
+        };
+        var orderLine2 = new OrderLine
+        {
+            Item = item2,
+            Quantity = 2.1m
+        };
+        var orderLine3 = new OrderLine
+        {
+            Item = item3,
+            Quantity = 100
+        };
+        var order1 = new Order
+        {
+            OrderLines = [orderLine1, orderLine2, orderLine3],
+            Time = DateTime.Now - TimeSpan.FromDays(2)
+        };
+        var order2 = new Order
+        {
+            OrderLines = [orderLine2],
+            Time = DateTime.Now
+        };
+
+        var customer1 = new Customer
+        {
+            Name = "Ramanda",
+            Orders = []
+        };
+        var customer2 = new Customer
+        {
+            Name = "Totoro",
+            Orders = []
+        };
+
+
+        customer1.CreateOrder(OrderBook, order1);
+        customer2.CreateOrder(OrderBook, order2);
+    }
+
+    public OrderBook OrderBook { get; } = new()
+    {
+        ProcessedOrders = [],
+        QueuedOrders = []
+    };
+
+    public void Button_OnClick()
+    {
+        OrderBook.ProcessNextOrder();
+    }
+}
+
+public class Item
+{
+    public string Name;
+    public decimal PricePerUnit;
+}
+
+public class BulkItem : Item
+{
+    private string MeasurementUnit;
+}
+
+public class UnitItem : Item
+{
+    public decimal Weight;
+}
+
+public class Inventory
+{
+    public const decimal LowStockThreshold = 5;
+    public Dictionary<Item, decimal> stock;
+
+    public List<Item> LowStockItems()
+    {
+        List<Item> lowStockItems = [];
+        foreach (var (item, quantity) in stock)
+            if (quantity < LowStockThreshold)
+                lowStockItems.Add(item);
+
+        return lowStockItems;
+    }
+}
+
+public class OrderLine
+{
+    public Item Item { get; set; }
+    public decimal Quantity { get; set; }
+
+    public override string ToString()
+    {
+        return $"{Item.Name} x {Quantity}";
+    }
+}
+
+public class Order
+{
+    public PrintableObservableCollection<OrderLine> OrderLines { get; set; }
+
+    public DateTime Time { get; set; }
+
+    public decimal TotalPrice()
+    {
+        decimal totalPrice = 0;
+        foreach (var orderLine in OrderLines) totalPrice += orderLine.Item.PricePerUnit * orderLine.Quantity;
+
+        return totalPrice;
+    }
+
+    public override string ToString()
+    {
+        return $"Order {Time}: {TotalPrice()}$";
+    }
+}
+
+public class OrderBook
+{
+    public ObservableCollection<Order> ProcessedOrders { get; init; }
+    public ObservableCollection<Order> QueuedOrders { get; init; }
+
+    public void QueueOrder(Order order)
+    {
+        QueuedOrders.Add(order);
+    }
+
+    public void ProcessNextOrder()
+    {
+        if (QueuedOrders.Count != 0)
+        {
+            ProcessedOrders.Add(QueuedOrders[0]);
+            QueuedOrders.RemoveAt(0);
+        }
+    }
+
+    public decimal TotalRevenue()
+    {
+        decimal totalRevenue = 0;
+        foreach (var order in ProcessedOrders) totalRevenue += order.TotalPrice();
+
+        return totalRevenue;
+    }
+}
+
+public class Customer
+{
+    public string Name;
+    public List<Order> Orders;
+
+    public void CreateOrder(OrderBook orderBook, Order order)
+    {
+        Orders.Add(order);
+        orderBook.QueuedOrders.Add(order);
+    }
+}
+
+public class PrintableObservableCollection<T> : ObservableCollection<T>
+{
+    public override string ToString()
+    {
+        return string.Join(Environment.NewLine, Items);
+    }
+}
